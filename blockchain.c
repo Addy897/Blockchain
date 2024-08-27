@@ -63,12 +63,27 @@ void print_blockchain(Block* head) {
         current = current->next;
     }
 }
+void verify_block(Block* block){
+    char str[1024];
+    snprintf(str, sizeof(str), "%d%ld%s%s", block->index,block->timestamp, block->previous_hash, block->data);
+    char hash[65];
+    sha256(str, hash);
+    if(strncmp(block->hash,hash,strlen(hash))==0){
+        printf("Block of index %d and data %s is valid\n",block->index,block->data);
+    }else{
+        printf("Block of index %d and data %s is invalid\n",block->index,block->data);
 
+    }
+
+
+}
 int main() {
     Block* blockchain = NULL;
 
     add_block(&blockchain, 1, "Data 1");
     add_block(&blockchain, 2, "Data 2");
+    verify_block(blockchain->next);
+
     add_block(&blockchain, 3, "Data 3");
 
     print_blockchain(blockchain);
